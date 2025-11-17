@@ -10,6 +10,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
  * @returns 
  */
 export default function DrawingScreen() {
+    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
     const FUNCTIONS = [
         { name: 'f(x) = x', formula: (x: number) => x },
         { name: 'f(x) = -x', formula: (x: number) => -x },
@@ -19,15 +20,14 @@ export default function DrawingScreen() {
         { name: 'f(x) = 1/x', formula: (x: number) => 1 / x },
         { name: 'f(x) = ln(x)', formula: (x: number) => Math.log(x) },
     ];
-
-    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-    const GRID_SIZE = 20;
+    const GRID_SIZE = Math.floor(SCREEN_HEIGHT / 58);
     const SCALE = 40;
     const [shuffledFunctions, setShuffledFunctions] = useState(FUNCTIONS);
     const [currentFunction, setCurrentFunction] = useState(0);
     const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
     const [drawing, setDrawing] = useState(true);
     const [timeLeft, setTimeLeft] = useState(120); // 2 minutes in seconds
+    const [reset] = useState(false);
     const score = useSharedValue(0);
 
     useEffect(() => {
@@ -67,19 +67,12 @@ export default function DrawingScreen() {
             onMoveShouldSetPanResponder: () => true,
             onPanResponderMove: (_, gestureState) => {
                 if (drawing) {
-                    console.log("Drawing")
                     const { moveX, moveY } = gestureState;
-                    console.log("moveX: ", moveX)
-                    console.log("moveY: ", moveY)
-                    const canvasX = moveX
-                    const canvasY = moveY
-
                     const newPoint = { x: moveX, y: moveY };
                     setPoints((prev) => [...prev, newPoint]);
                 }
             },
             onPanResponderRelease: () => {
-                console.log("onPanResponderRelease")
                 calculateScore(); // Calculer le score après le tracé
             },
         })
@@ -100,6 +93,10 @@ export default function DrawingScreen() {
         score.value = newScore;
     };
 
+    useEffect(() => {
+        renderGrid()
+    }, [reset]);
+
     const renderGrid = () => {
         const lines = [];
 
@@ -117,34 +114,39 @@ export default function DrawingScreen() {
                 />
             );
         }
-
+        console.log("GRID_SIZE: ", GRID_SIZE)
         // Horizontal lines
-        for (let y = -GRID_SIZE; y <= GRID_SIZE; y++) {
-            lines.push(
-                <Line
-                    key={`h-${y}`}
-                    x1={0}
-                    y1={y * SCALE + SCREEN_HEIGHT / 2}
-                    x2={SCREEN_WIDTH}
-                    y2={y * SCALE + SCREEN_HEIGHT / 2}
-                    stroke="#e0e0e0"
-                    strokeWidth="1"
-                />
-            );
-        }
+        for (let y = 0; y <= GRID_SIZE; y++) {
+            console.log("y: ", y)
 
-        // X-axis
-        lines.push(
-            <Line
-                key="x-axis"
-                x1={0}
-                y1={SCREEN_HEIGHT / 2}
-                x2={SCREEN_WIDTH}
-                y2={SCREEN_HEIGHT / 2}
-                stroke="#ff0000"
-                strokeWidth="2"
-            />
-        );
+            if (y == Math.floor(GRID_SIZE / 2)) {
+                console.log("GRID_SIZE / 2: ", GRID_SIZE / 2)
+                lines.push(
+                    <Line
+                        key={`h-${y}`}
+                        x1={0}
+                        y1={y * SCALE}
+                        x2={SCREEN_WIDTH}
+                        y2={y * SCALE}
+                        stroke="#a61c1cff"
+                        strokeWidth="1"
+                    />
+                );
+            }
+            else {
+                lines.push(
+                    <Line
+                        key={`h-${y}`}
+                        x1={0}
+                        y1={y * SCALE}
+                        x2={SCREEN_WIDTH}
+                        y2={y * SCALE}
+                        stroke="#e0e0e0"
+                        strokeWidth="1"
+                    />
+                );
+            }
+        }
 
         // Y-axis
         lines.push(
@@ -154,7 +156,7 @@ export default function DrawingScreen() {
                 y1={0}
                 x2={SCREEN_WIDTH / 2}
                 y2={SCREEN_HEIGHT}
-                stroke="#ff0000"
+                stroke="#a61c1cff"
                 strokeWidth="2"
             />
         );
@@ -173,9 +175,11 @@ export default function DrawingScreen() {
             />
         ));
     };
-
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView contentContainerStyle={[styles.container,
+        { minHeight: SCREEN_HEIGHT * 0.8 },
+        ]
+        }>
             <View style={styles.header}>
                 <Text style={styles.functionText}>
                     {shuffledFunctions[currentFunction]?.name || ''}
@@ -186,48 +190,66 @@ export default function DrawingScreen() {
                 <Text style={styles.timer}>Temps restant : {timeLeft}s</Text>
             </View>
 
-            <View style={styles.canvas} {...panResponder.panHandlers}
+            <View style={{
+                flex: 1,
+                backgroundColor: '#365397ff',
+                alignItems: "center",
+                justifyContent: "space-evenly",
+                width: "100%",
+            }}
+                {...panResponder.panHandlers}
             >
-                <Svg height="100%" width="100%"
-                    fill={"#ff0000"}>
+                {<Svg style={
+                    styles.canvas
+                }
+                    fill={"#33942aff"}>
                     {renderGrid()}
                     {renderPoints()}
-                </Svg>
+                </Svg>}
             </View>
         </ScrollView>
-    );
+    )
+
 }
 
 const styles = StyleSheet.create({
     container: {
+        justifyContent: "space-evenly",
         flex: 1,
-        backgroundColor: '#a8339aff',
+        backgroundColor: '#6ea37aff',
     },
     header: {
-        padding: 20,
+
         alignItems: 'center',
+        justifyContent: "space-evenly",
+        flex: 0.2,
         backgroundColor: '#842828ff',
     },
     functionText: {
+        alignItems: "center",
+        flex: 1,
         fontSize: 24,
         fontWeight: 'bold',
         color: '#000',
-        marginBottom: 10,
     },
     score: {
+        alignItems: "center",
         fontSize: 20,
         color: '#6366f1',
         fontWeight: 'bold',
+        justifyContent: "space-evenly",
     },
     timer: {
+        alignItems: "center",
         fontSize: 18,
         color: '#ff0000',
         marginTop: 10,
+        justifyContent: "space-evenly",
     },
     canvas: {
-        flex: 1,
-        backgroundColor: '#27157dff',
-        borderRadius: 20,
-        margin: 20
+        flex: 0.9,
+        backgroundColor: '#2b8ebbff',
+        justifyContent: "space-evenly",
+        width: "90%",
     },
 });
