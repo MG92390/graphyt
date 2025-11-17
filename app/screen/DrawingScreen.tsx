@@ -20,7 +20,8 @@ export default function DrawingScreen() {
         { name: 'f(x) = 1/x', formula: (x: number) => 1 / x },
         { name: 'f(x) = ln(x)', formula: (x: number) => Math.log(x) },
     ];
-    const GRID_SIZE = Math.floor(SCREEN_HEIGHT / 58);
+    const GRID_SIZE_Y = Math.floor(SCREEN_HEIGHT / 58);
+    const GRID_SIZE_X = Math.floor(SCREEN_WIDTH / 46);
     const SCALE = 40;
     const [shuffledFunctions, setShuffledFunctions] = useState(FUNCTIONS);
     const [currentFunction, setCurrentFunction] = useState(0);
@@ -93,34 +94,44 @@ export default function DrawingScreen() {
         score.value = newScore;
     };
 
-    useEffect(() => {
-        renderGrid()
-    }, [reset]);
-
     const renderGrid = () => {
         const lines = [];
 
         // Vertical lines
-        for (let x = -GRID_SIZE; x <= GRID_SIZE; x++) {
-            lines.push(
-                <Line
-                    key={`v-${x}`}
-                    x1={x * SCALE + SCREEN_WIDTH / 2}
-                    y1={0}
-                    x2={x * SCALE + SCREEN_WIDTH / 2}
-                    y2={SCREEN_HEIGHT}
-                    stroke="#e0e0e0"
-                    strokeWidth="1"
-                />
-            );
-        }
-        console.log("GRID_SIZE: ", GRID_SIZE)
-        // Horizontal lines
-        for (let y = 0; y <= GRID_SIZE; y++) {
-            console.log("y: ", y)
+        for (let x = 0; x <= GRID_SIZE_X; x++) {
+            //Set the Y-axis
+            if (x == Math.floor(GRID_SIZE_X / 2)) {
+                lines.push(
+                    <Line
+                        key={`v-${x}`}
+                        x1={x * SCALE}
+                        y1={0}
+                        x2={x * SCALE}
+                        y2={SCREEN_HEIGHT}
+                        stroke="#a61c1cff"
+                        strokeWidth="1"
+                    />
+                );
+            }
+            else {
+                lines.push(
+                    <Line
+                        key={`v-${x}`}
+                        x1={x * SCALE}
+                        y1={0}
+                        x2={x * SCALE}
+                        y2={SCREEN_HEIGHT}
+                        stroke="#e0e0e0"
+                        strokeWidth="1"
+                    />
+                );
+            }
 
-            if (y == Math.floor(GRID_SIZE / 2)) {
-                console.log("GRID_SIZE / 2: ", GRID_SIZE / 2)
+        }
+        // Horizontal lines
+        for (let y = 0; y <= GRID_SIZE_Y; y++) {
+            //Set the X-axis
+            if (y == Math.floor(GRID_SIZE_Y / 2)) {
                 lines.push(
                     <Line
                         key={`h-${y}`}
@@ -147,19 +158,6 @@ export default function DrawingScreen() {
                 );
             }
         }
-
-        // Y-axis
-        lines.push(
-            <Line
-                key="y-axis"
-                x1={SCREEN_WIDTH / 2}
-                y1={0}
-                x2={SCREEN_WIDTH / 2}
-                y2={SCREEN_HEIGHT}
-                stroke="#a61c1cff"
-                strokeWidth="2"
-            />
-        );
 
         return lines;
     };
@@ -219,7 +217,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#6ea37aff',
     },
     header: {
-
         alignItems: 'center',
         justifyContent: "space-evenly",
         flex: 0.2,
