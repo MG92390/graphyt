@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Animated, View, Text, StyleSheet, Dimensions, PanResponder, Alert, ScrollView, Button, Pressable } from 'react-native';
+import { Animated, View, Text, StyleSheet, Dimensions, PanResponder, Alert, ScrollView, Pressable } from 'react-native';
 import Svg, { Line, Circle } from 'react-native-svg';
 import { useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
+import EraseButton from '@/components/drawing/EraseButton';
+import { PointsType } from '../types/PointsType';
 
 /**
  * Screen for drawing the function
@@ -18,12 +20,12 @@ export default function DrawingScreen() {
         { name: 'f(x) = 1/x', formula: (x: number) => 1 / x },
         { name: 'f(x) = ln(x)', formula: (x: number) => Math.log(x) },
     ];
-    const GRID_SIZE_Y = Math.floor(SCREEN_HEIGHT / 58);
-    const GRID_SIZE_X = Math.floor(SCREEN_WIDTH / 46);
+    const GRID_SIZE_Y = Math.max(Math.floor(SCREEN_HEIGHT / 58), 10);
+    const GRID_SIZE_X = Math.max(Math.floor(SCREEN_WIDTH / 46), 10);
     const SCALE = 40;
     const [shuffledFunctions, setShuffledFunctions] = useState(FUNCTIONS);
     const [currentFunction, setCurrentFunction] = useState(0);
-    const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
+    const [points, setPoints] = useState<Array<PointsType>>([]);
     const [drawing, setDrawing] = useState(true);
     const [timeLeft, setTimeLeft] = useState(120); // 2 minutes in seconds
     const score = useSharedValue(0);
@@ -93,7 +95,8 @@ export default function DrawingScreen() {
 
     const renderGrid = () => {
         const lines = [];
-
+        console.log("GRID_SIZE_Y: ", GRID_SIZE_Y)
+        console.log("SCREEN_HEIGHT: ", Math.floor(SCREEN_HEIGHT / 58))
         // Vertical lines
         for (let x = 0; x <= GRID_SIZE_X; x++) {
             //Set the Y-axis
@@ -104,7 +107,7 @@ export default function DrawingScreen() {
                         x1={x * SCALE}
                         y1={0}
                         x2={x * SCALE}
-                        y2={SCREEN_HEIGHT}
+                        y2={GRID_SIZE_X * 58}
                         stroke="#a61c1cff"
                         strokeWidth="1"
                     />
@@ -117,7 +120,7 @@ export default function DrawingScreen() {
                         x1={x * SCALE}
                         y1={0}
                         x2={x * SCALE}
-                        y2={SCREEN_HEIGHT}
+                        y2={GRID_SIZE_X * 58}
                         stroke="#e0e0e0"
                         strokeWidth="1"
                     />
@@ -164,7 +167,7 @@ export default function DrawingScreen() {
             <Circle
                 key={index}
                 cx={point.x}
-                cy={point.y - 210}
+                cy={point.y}
                 r="4"
                 fill="#6366f1"
             />
@@ -172,7 +175,7 @@ export default function DrawingScreen() {
     };
     return (
         <ScrollView contentContainerStyle={[styles.container,
-        { minHeight: SCREEN_HEIGHT * 0.8 },
+        { minHeight: 500 },
         ]
         }>
             <View style={styles.header}>
@@ -183,23 +186,18 @@ export default function DrawingScreen() {
                     <Animated.Text style={[styles.score, scoreStyle]}>
                         Score: {Math.round(score.value)}
                     </Animated.Text>
-                    <Text style={styles.timer}>Temps restant : {timeLeft}s</Text>
+                    <Text style={styles.timer}>Timer : {timeLeft}s</Text>
                 </View>
                 <View style={styles.header_buttons}>
-                    <Pressable
-                        onPress={() => Alert.alert('Simple Button pressed')}
-                        style={styles.header_button}
-                    >
-                        <Text
-                            style={styles.header_button_text}> {'Effacer'}
-                        </Text>
-                    </Pressable>
+                    <EraseButton
+                        points={points}>
+                    </EraseButton>
                     <Pressable
                         onPress={() => Alert.alert('Simple Button pressed')}
                         style={styles.header_button}
                     >
                         <Text style={styles.header_button_text}>
-                            {'Valider la function'}
+                            {'Valider'}
                         </Text>
                     </Pressable>
                     <Pressable
@@ -215,7 +213,6 @@ export default function DrawingScreen() {
 
             <View style={{
                 flex: 1,
-                backgroundColor: '#365397ff',
                 alignItems: "center",
                 justifyContent: "space-evenly",
                 width: "100%",
@@ -239,27 +236,27 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: "space-evenly",
         flex: 1,
-        backgroundColor: '#6ea37aff',
+        backgroundColor: '#aebbd6ff',
+        minHeight: '50%'
     },
     header: {
         alignItems: 'center',
         justifyContent: "space-evenly",
         flex: 0.2,
         flexDirection: 'row',
-        backgroundColor: '#842828ff',
+        minHeight: "20%",
+        padding: 10
     },
     header_text: {
         alignItems: 'center',
         justifyContent: "space-evenly",
-        flex: 0.3,
-        backgroundColor: '#38a156ff',
+        flex: 0.33,
     },
     header_buttons: {
         alignItems: 'center',
         justifyContent: "space-evenly",
         flex: 1,
         flexDirection: 'row',
-        backgroundColor: '#4c38afff',
     },
     header_button: {
         alignItems: 'center',
@@ -268,15 +265,16 @@ const styles = StyleSheet.create({
         borderRadius: 45,
         flex: 0.2,
         justifyContent: "space-evenly",
-        padding: 10
+        padding: 10,
+        paddingHorizontal: 20
     },
     header_button_text: {
-        fontSize: 25
+        fontSize: 14
     },
     functionText: {
         alignItems: "center",
         flex: 1,
-        fontSize: 24,
+        fontSize: 14,
         fontWeight: 'bold',
         color: '#000',
     },
@@ -299,5 +297,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#2b8ebbff',
         justifyContent: "space-evenly",
         width: "90%",
+        minHeight: '50%'
     },
 });
