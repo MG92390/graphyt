@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Animated, View, Text, StyleSheet, Dimensions, PanResponder, Alert, ScrollView } from 'react-native';
+import { Animated, View, Text, StyleSheet, Dimensions, PanResponder, Alert, ScrollView, Button, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Line, Circle } from 'react-native-svg';
 import { useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
@@ -28,7 +28,6 @@ export default function DrawingScreen() {
     const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
     const [drawing, setDrawing] = useState(true);
     const [timeLeft, setTimeLeft] = useState(120); // 2 minutes in seconds
-    const [reset] = useState(false);
     const score = useSharedValue(0);
 
     useEffect(() => {
@@ -179,13 +178,35 @@ export default function DrawingScreen() {
         ]
         }>
             <View style={styles.header}>
-                <Text style={styles.functionText}>
-                    {shuffledFunctions[currentFunction]?.name || ''}
-                </Text>
-                <Animated.Text style={[styles.score, scoreStyle]}>
-                    Score: {Math.round(score.value)}
-                </Animated.Text>
-                <Text style={styles.timer}>Temps restant : {timeLeft}s</Text>
+                <View style={styles.header_text}>
+                    <Text style={styles.functionText}>
+                        {shuffledFunctions[currentFunction]?.name || ''}
+                    </Text>
+                    <Animated.Text style={[styles.score, scoreStyle]}>
+                        Score: {Math.round(score.value)}
+                    </Animated.Text>
+                    <Text style={styles.timer}>Temps restant : {timeLeft}s</Text>
+                </View>
+                <View style={styles.header_buttons}>
+                    <Pressable
+                        onPress={() => Alert.alert('Simple Button pressed')}
+                        style={styles.header_button}
+                    >
+                        <Text> {'Press Me'}</Text>
+                    </Pressable>
+                    <Pressable
+                        onPress={() => Alert.alert('Simple Button pressed')}
+                        style={styles.header_button}
+                    >
+                        <Text> {'Press Me'}</Text>
+                    </Pressable>
+                    <Pressable
+                        onPress={() => Alert.alert('Simple Button pressed')}
+                        style={styles.header_button}
+                    >
+                        <Text> {'Press Me'}</Text>
+                    </Pressable>
+                </View>
             </View>
 
             <View style={{
@@ -205,7 +226,7 @@ export default function DrawingScreen() {
                     {renderPoints()}
                 </Svg>}
             </View>
-        </ScrollView>
+        </ScrollView >
     )
 
 }
@@ -220,7 +241,27 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: "space-evenly",
         flex: 0.2,
+        flexDirection: 'row',
         backgroundColor: '#842828ff',
+    },
+    header_text: {
+        alignItems: 'center',
+        justifyContent: "space-evenly",
+        flex: 0.3,
+        backgroundColor: '#38a156ff',
+    },
+    header_buttons: {
+        alignItems: 'center',
+        justifyContent: "space-evenly",
+        flex: 1,
+        flexDirection: 'row',
+        backgroundColor: '#4c38afff',
+    },
+    header_button: {
+        alignItems: 'center',
+        justifyContent: "space-evenly",
+        flex: 0.3,
+        backgroundColor: '#9b2479ff',
     },
     functionText: {
         alignItems: "center",
