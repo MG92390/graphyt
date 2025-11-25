@@ -1,10 +1,10 @@
-import { Alert, Pressable, Text, View } from "react-native";
+import { Pressable, Text } from "react-native";
 import React from "react";
 import { styles } from "./styles";
 import { EraseButtonPropsType } from "@/app/types/EraseButtonPropsType";
 
 /**
- * Button that push the home screen. Reset every provider to null.
+ * Button that erase the current drawing.
  * @returns 
  */
 export default function EraseButton(props: Readonly<EraseButtonPropsType>) {
