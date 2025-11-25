@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Animated, View, Text, StyleSheet, Dimensions, PanResponder, Alert, ScrollView, Button, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Line, Circle } from 'react-native-svg';
 import { useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 /**
  * Screen for drawing the function
