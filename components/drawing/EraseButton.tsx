@@ -11,7 +11,7 @@ export default function EraseButton(props: Readonly<EraseButtonPropsType>) {
 
     return (
         <Pressable
-            onPress={() => Alert.alert('Simple Button pressed')}
+            onPress={() => props.setPoints([])}
             style={styles.header_button}
         >
             <Text

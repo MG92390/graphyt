@@ -190,7 +190,7 @@ export default function DrawingScreen() {
                 </View>
                 <View style={styles.header_buttons}>
                     <EraseButton
-                        points={points}>
+                        setPoints={setPoints}>
                     </EraseButton>
                     <Pressable
                         onPress={() => Alert.alert('Simple Button pressed')}
