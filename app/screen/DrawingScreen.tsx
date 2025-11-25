@@ -192,19 +192,25 @@ export default function DrawingScreen() {
                         onPress={() => Alert.alert('Simple Button pressed')}
                         style={styles.header_button}
                     >
-                        <Text> {'Press Me'}</Text>
+                        <Text
+                            style={styles.header_button_text}> {'Effacer'}
+                        </Text>
                     </Pressable>
                     <Pressable
                         onPress={() => Alert.alert('Simple Button pressed')}
                         style={styles.header_button}
                     >
-                        <Text> {'Press Me'}</Text>
+                        <Text style={styles.header_button_text}>
+                            {'Valider la function'}
+                        </Text>
                     </Pressable>
                     <Pressable
                         onPress={() => Alert.alert('Simple Button pressed')}
                         style={styles.header_button}
                     >
-                        <Text> {'Press Me'}</Text>
+                        <Text style={styles.header_button_text}>
+                            {'Fonction suivante'}
+                        </Text>
                     </Pressable>
                 </View>
             </View>
@@ -259,9 +265,15 @@ const styles = StyleSheet.create({
     },
     header_button: {
         alignItems: 'center',
+        backgroundColor: '#b1b9dcff',
+        borderWidth: 2,
+        borderRadius: 45,
+        flex: 0.2,
         justifyContent: "space-evenly",
-        flex: 0.3,
-        backgroundColor: '#9b2479ff',
+        padding: 10
+    },
+    header_button_text: {
+        fontSize: 25
     },
     functionText: {
         alignItems: "center",
