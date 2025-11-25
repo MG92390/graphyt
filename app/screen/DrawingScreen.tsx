@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback, Dispatch, SetStateAction } from 'react';
 import { Animated, View, Text, StyleSheet, Dimensions, PanResponder, Alert, ScrollView, Pressable } from 'react-native';
 import Svg, { Line, Circle } from 'react-native-svg';
 import { useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
 import EraseButton from '@/components/drawing/EraseButton';
 import { PointsType } from '../types/PointsType';
+import { FunctionType } from '../types/FunctionType';
 
 /**
  * Screen for drawing the function
@@ -11,7 +12,7 @@ import { PointsType } from '../types/PointsType';
  */
 export default function DrawingScreen() {
     const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-    const FUNCTIONS = [
+    const FUNCTIONS: Array<FunctionType> = [
         { name: 'f(x) = x', formula: (x: number) => x },
         { name: 'f(x) = -x', formula: (x: number) => -x },
         { name: 'f(x) = x²', formula: (x: number) => x * x },
@@ -28,7 +29,7 @@ export default function DrawingScreen() {
     const [points, setPoints] = useState<Array<PointsType>>([]);
     const [drawing, setDrawing] = useState(true);
     const [timeLeft, setTimeLeft] = useState(120); // 2 minutes in seconds
-    const score = useSharedValue(0);
+    const [score, setScore] = useState(0);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -72,26 +73,27 @@ export default function DrawingScreen() {
                     setPoints((prev) => [...prev, newPoint]);
                 }
             },
-            onPanResponderRelease: () => {
-                calculateScore(); // Calculer le score après le tracé
-            },
         })
     ).current;
 
-    const calculateScore = () => {
-        const actualPoints = points.map((p) => ({
-            x: p.x,
-            y: shuffledFunctions[currentFunction].formula(p.x),
-        }));
+    const calculateScore = useCallback(
+        (points: Array<PointsType>,
+            shuffledFunctions: Array<FunctionType>,
+            currentFunction: number,
+            setScore: Dispatch<SetStateAction<number>>): void => {
+            const actualPoints = points.map((p) => ({
+                x: p.x,
+                y: shuffledFunctions[currentFunction].formula(p.x),
+            }));
 
-        const distances = points.map((p, i) =>
-            Math.abs(p.y - actualPoints[i]?.y || 0)
-        );
+            const distances = points.map((p, i) =>
+                Math.abs(p.y - actualPoints[i]?.y || 0)
+            );
 
-        const avgDistance = distances.reduce((a, b) => a + b, 0) / distances.length;
-        const newScore = Math.max(0, 100 - avgDistance * 20);
-        score.value = newScore;
-    };
+            const avgDistance = distances.reduce((a, b) => a + b, 0) / distances.length;
+            const newScore = Math.max(0, 100 - avgDistance * 20);
+            setScore(newScore);
+        }, []);
 
     const renderGrid = () => {
         const lines = [];
@@ -184,7 +186,7 @@ export default function DrawingScreen() {
                         {shuffledFunctions[currentFunction]?.name || ''}
                     </Text>
                     <Animated.Text style={[styles.score, scoreStyle]}>
-                        Score: {Math.round(score.value)}
+                        Score: {Math.round(score)}
                     </Animated.Text>
                     <Text style={styles.timer}>Timer : {timeLeft}s</Text>
                 </View>
