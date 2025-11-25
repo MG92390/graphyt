@@ -47,7 +47,7 @@ export default function DrawingScreen() {
     }, []);
 
     const endRound = () => {
-        Alert.alert('Round terminé', `Votre score : ${Math.round(score.value)}`);
+        Alert.alert('Round terminé', `Votre score : ${Math.round(score)}`);
         setPoints([]);
         setCurrentFunction((prev) => (prev + 1) % shuffledFunctions.length);
         setTimeLeft(120); // Réinitialise le timer
@@ -55,7 +55,7 @@ export default function DrawingScreen() {
 
     const scoreStyle = useAnimatedStyle(() => {
         return {
-            transform: [{ scale: withSpring(score.value > 80 ? 1.2 : 1) }],
+            transform: [{ scale: withSpring(score > 80 ? 1.2 : 1) }],
         };
     });
 
