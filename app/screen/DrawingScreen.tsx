@@ -5,6 +5,7 @@ import { useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reani
 import EraseButton from '@/components/drawing/EraseButton';
 import { PointsType } from '../types/PointsType';
 import { FunctionType } from '../types/FunctionType';
+import ValidationButton from '@/components/drawing/ValidationButton';
 
 /**
  * Screen for drawing the function
@@ -76,24 +77,6 @@ export default function DrawingScreen() {
         })
     ).current;
 
-    const calculateScore = useCallback(
-        (points: Array<PointsType>,
-            shuffledFunctions: Array<FunctionType>,
-            currentFunction: number,
-            setScore: Dispatch<SetStateAction<number>>): void => {
-            const actualPoints = points.map((p) => ({
-                x: p.x,
-                y: shuffledFunctions[currentFunction].formula(p.x),
-            }));
-
-            const distances = points.map((p, i) =>
-                Math.abs(p.y - actualPoints[i]?.y || 0)
-            );
-
-            const avgDistance = distances.reduce((a, b) => a + b, 0) / distances.length;
-            const newScore = Math.max(0, 100 - avgDistance * 20);
-            setScore(newScore);
-        }, []);
 
     const renderGrid = () => {
         const lines = [];
@@ -194,14 +177,13 @@ export default function DrawingScreen() {
                     <EraseButton
                         setPoints={setPoints}>
                     </EraseButton>
-                    <Pressable
-                        onPress={() => Alert.alert('Simple Button pressed')}
-                        style={styles.header_button}
-                    >
-                        <Text style={styles.header_button_text}>
-                            {'Valider'}
-                        </Text>
-                    </Pressable>
+                    <ValidationButton
+                        points={points}
+                        shuffledFunctions={shuffledFunctions}
+                        currentFunction={currentFunction}
+                        setScore={setScore}
+                        setTimeLeft={setTimeLeft}>
+                    </ValidationButton>
                     <Pressable
                         onPress={() => Alert.alert('Simple Button pressed')}
                         style={styles.header_button}
