@@ -10,6 +10,7 @@ import { NextFunctionButtonPropsType } from "@/app/types/NextFunctionButtonProps
 export default function NextFunctionButton(props: Readonly<NextFunctionButtonPropsType>) {
 
     return (
+        {props.drawing ? 
         <Pressable
             onPress={() => {
                 Alert.alert('Round terminé', `Votre score : ${Math.round(props.score)}`);

@@ -173,6 +173,7 @@ export default function DrawingScreen() {
                         setPoints={setPoints}>
                     </EraseButton>
                     <ValidationButton
+                        drawing={drawing}
                         points={points}
                         shuffledFunctions={shuffledFunctions}
                         currentFunction={currentFunction}
