@@ -60,22 +60,20 @@ export default function DrawingScreen() {
         };
     });
 
-    const panResponder = useRef(
-        PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
-            onPanResponderGrant: () => {
-                //setPoints([]); Réinitialiser les points pour un nouveau tracé
-            },
-            onMoveShouldSetPanResponder: () => true,
-            onPanResponderMove: (_, gestureState) => {
-                if (drawing) {
-                    const { moveX, moveY } = gestureState;
-                    const newPoint = { x: moveX, y: moveY };
-                    setPoints((prev) => [...prev, newPoint]);
-                }
-            },
-        })
-    ).current;
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderGrant: () => {
+            //setPoints([]); Réinitialiser les points pour un nouveau tracé
+        },
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderMove: (_, gestureState) => {
+            if (drawing) {
+                const { moveX, moveY } = gestureState;
+                const newPoint = { x: moveX, y: moveY };
+                setPoints((prev) => [...prev, newPoint]);
+            }
+        },
+    });
 
 
     const renderGrid = () => {
