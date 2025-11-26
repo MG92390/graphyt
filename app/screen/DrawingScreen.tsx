@@ -182,7 +182,9 @@ export default function DrawingScreen() {
                         shuffledFunctions={shuffledFunctions}
                         currentFunction={currentFunction}
                         setScore={setScore}
-                        setTimeLeft={setTimeLeft}>
+                        setTimeLeft={setTimeLeft}
+                        setDrawing={setDrawing}
+                    >
                     </ValidationButton>
                     <Pressable
                         onPress={() => Alert.alert('Simple Button pressed')}

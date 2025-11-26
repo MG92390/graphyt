@@ -8,5 +8,6 @@ export type ValidationButtonPropsType = {
     shuffledFunctions: Array<FunctionType>,
     currentFunction: number,
     setScore: Dispatch<SetStateAction<number>>,
-    setTimeLeft: Dispatch<SetStateAction<number>>
+    setTimeLeft: Dispatch<SetStateAction<number>>,
+    setDrawing: Dispatch<SetStateAction<boolean>>,
 }
