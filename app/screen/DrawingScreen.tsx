@@ -44,6 +44,7 @@ export default function DrawingScreen() {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
                     clearInterval(interval);
+                    setDrawing(false);
                     return 0;
                 }
                 return prev - 1;
@@ -183,6 +184,7 @@ export default function DrawingScreen() {
                     >
                     </ValidationButton>
                     <NextFunctionButton
+                        drawing={drawing}
                         score={score}
                         shuffledFunctions={shuffledFunctions}
                         currentFunction={currentFunction}
