@@ -169,6 +169,7 @@ export default function DrawingScreen() {
                 </View>
                 <View style={styles.header_buttons}>
                     <EraseButton
+                        drawing={drawing}
                         setPoints={setPoints}>
                     </EraseButton>
                     <ValidationButton
