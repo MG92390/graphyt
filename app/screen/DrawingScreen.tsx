@@ -141,7 +141,6 @@ export default function DrawingScreen() {
     };
 
     const renderPoints = () => {
-        console.log(SCREEN_HEIGHT * 0.05)
         return points.map((point, index) => (
             <Circle
                 key={index}
