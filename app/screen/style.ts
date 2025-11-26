@@ -1,45 +1,70 @@
 import { StyleSheet } from "react-native";
 
-export const style = StyleSheet.create({
-    goHomeButton: {
-        flex: 0.1,
-        width: "100%",
-        alignContent: "center",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    scrollViewContainer: {
-        alignContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgba(0,52,89,0.3)",
-        flex: 1,
+export const styles = StyleSheet.create({
+    container: {
         justifyContent: "space-evenly",
-        minHeight: 500,
-        minWidth: 200,
+        flex: 1,
+        backgroundColor: '#aebbd6ff',
+        minHeight: '50%'
     },
-    infosConfigContainer: {
-        alignItems: "center",
+    header: {
+        alignItems: 'center',
+        justifyContent: "space-evenly",
         flex: 0.2,
-        flexDirection: "row",
-        justifyContent: "center",
-        paddingEnd: "2%",
-        width: "100%",
+        flexDirection: 'row',
+        minHeight: "20%",
+        padding: 10
     },
-    infosContainer: {
+    header_text: {
+        alignItems: 'center',
+        justifyContent: "space-evenly",
+        flex: 0.33,
+    },
+    header_buttons: {
+        alignItems: 'center',
+        justifyContent: "space-evenly",
+        flex: 1,
+        flexDirection: 'row',
+    },
+    header_button: {
+        alignItems: 'center',
+        backgroundColor: '#b1b9dcff',
+        borderWidth: 2,
+        borderRadius: 45,
+        flex: 0.2,
+        justifyContent: "space-evenly",
+        padding: 10,
+        paddingHorizontal: 20
+    },
+    header_button_text: {
+        fontSize: 14
+    },
+    functionText: {
         alignItems: "center",
-        flex: 0.1,
-        justifyContent: "center",
-        width: "100%",
+        flex: 1,
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#000',
     },
-    imageContainer: {
-        flex: 0.6,
-        width: "100%",
-    },
-    startButton: {
-        flex: 0.1,
-        width: "100%",
-        alignContent: "center",
+    score: {
         alignItems: "center",
-        justifyContent: "center",
+        fontSize: 20,
+        color: '#6366f1',
+        fontWeight: 'bold',
+        justifyContent: "space-evenly",
+    },
+    timer: {
+        alignItems: "center",
+        fontSize: 18,
+        color: '#ff0000',
+        marginTop: 10,
+        justifyContent: "space-evenly",
+    },
+    canvas: {
+        flex: 0.9,
+        backgroundColor: '#2b8ebbff',
+        justifyContent: "space-evenly",
+        width: "90%",
+        minHeight: '50%'
     },
 });
