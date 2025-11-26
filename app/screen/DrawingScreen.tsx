@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect, useCallback, Dispatch, SetStateAction } from 'react';
-import { Animated, View, Text, StyleSheet, Dimensions, PanResponder, Alert, ScrollView, Pressable } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Animated, View, Text, Dimensions, PanResponder, ScrollView } from 'react-native';
 import Svg, { Line, Circle } from 'react-native-svg';
-import { useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
+import { useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import EraseButton from '@/components/drawing/EraseButton';
 import { PointsType } from '../types/PointsType';
 import { FunctionType } from '../types/FunctionType';
@@ -61,9 +61,6 @@ export default function DrawingScreen() {
 
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
-        onPanResponderGrant: () => {
-            //setPoints([]); Réinitialiser les points pour un nouveau tracé
-        },
         onMoveShouldSetPanResponder: () => true,
         onPanResponderMove: (_, gestureState) => {
             if (drawing) {
@@ -206,13 +203,11 @@ export default function DrawingScreen() {
             >
                 {<Svg style={
                     styles.canvas
-                }
-                    fill={"#33942aff"}>
+                }>
                     {renderGrid()}
                     {renderPoints()}
                 </Svg>}
             </View>
         </ScrollView >
     )
-
 }
