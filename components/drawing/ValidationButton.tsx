@@ -38,7 +38,7 @@ export default function ValidationButton(props: Readonly<ValidationButtonPropsTy
                 calculateScore(props.points, props.shuffledFunctions, props.currentFunction, props.setScore);
             }
             }
-            style={styles.header_button}
+            style={props.drawing ? styles.header_button : styles.header_button_disabled}
         >
             <Text
                 style={styles.header_button_text}>{'Valider'}
