@@ -75,8 +75,6 @@ export default function DrawingScreen() {
 
     const renderGrid = () => {
         const lines = [];
-        console.log("GRID_SIZE_Y: ", GRID_SIZE_Y)
-        console.log("SCREEN_HEIGHT: ", Math.floor(SCREEN_HEIGHT / 58))
         // Vertical lines
         for (let x = 0; x <= GRID_SIZE_X; x++) {
             //Set the Y-axis
