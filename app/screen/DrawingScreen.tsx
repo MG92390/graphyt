@@ -141,11 +141,12 @@ export default function DrawingScreen() {
     };
 
     const renderPoints = () => {
+        console.log(SCREEN_HEIGHT * 0.05)
         return points.map((point, index) => (
             <Circle
                 key={index}
-                cx={point.x}
-                cy={point.y}
+                cx={point.x - SCREEN_WIDTH * 0.05}
+                cy={point.y - SCREEN_HEIGHT * 0.3}
                 r="4"
                 fill="#6366f1"
             />
@@ -195,7 +196,7 @@ export default function DrawingScreen() {
                 </View>
             </View>
 
-            <View style={{
+            <Animated.View style={{
                 flex: 1,
                 alignItems: "center",
                 justifyContent: "space-evenly",
@@ -203,13 +204,13 @@ export default function DrawingScreen() {
             }}
                 {...panResponder.panHandlers}
             >
-                {<Svg style={
+                <Svg style={
                     styles.canvas
-                }>
+                } >
                     {renderGrid()}
                     {renderPoints()}
-                </Svg>}
-            </View>
+                </Svg>
+            </Animated.View>
         </ScrollView >
     )
 }
