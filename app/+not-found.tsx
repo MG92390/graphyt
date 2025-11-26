@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { Stack } from 'expo-router';
 import React from 'react';
-import { style } from './screen/style';
+import { style } from './screen/styles';
 import GoHomeButton from '@/components/navigation/GoHomeButton';
 
 export default function NotFoundScreen() {
