@@ -6,6 +6,7 @@ import EraseButton from '@/components/drawing/EraseButton';
 import { PointsType } from '../types/PointsType';
 import { FunctionType } from '../types/FunctionType';
 import ValidationButton from '@/components/drawing/ValidationButton';
+import NextFunctionButton from '@/components/drawing/NextFunctionButton';
 
 /**
  * Screen for drawing the function
@@ -30,14 +31,18 @@ export default function DrawingScreen() {
     const [points, setPoints] = useState<Array<PointsType>>([]);
     const [drawing, setDrawing] = useState(true);
     const [timeLeft, setTimeLeft] = useState(120); // 2 minutes in seconds
+    const [resetTimer, setResetTimer] = useState(false); // 2 minutes in seconds
     const [score, setScore] = useState(0);
 
     useEffect(() => {
+        if (resetTimer) {
+            setResetTimer(false)
+            setTimeLeft(120)
+        }
         const interval = setInterval(() => {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
                     clearInterval(interval);
-                    endRound();
                     return 0;
                 }
                 return prev - 1;
@@ -45,14 +50,7 @@ export default function DrawingScreen() {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, []);
-
-    const endRound = () => {
-        Alert.alert('Round terminé', `Votre score : ${Math.round(score)}`);
-        setPoints([]);
-        setCurrentFunction((prev) => (prev + 1) % shuffledFunctions.length);
-        setTimeLeft(120); // Réinitialise le timer
-    };
+    }, [resetTimer]);
 
     const scoreStyle = useAnimatedStyle(() => {
         return {
@@ -184,14 +182,16 @@ export default function DrawingScreen() {
                         setDrawing={setDrawing}
                     >
                     </ValidationButton>
-                    <Pressable
-                        onPress={() => Alert.alert('Simple Button pressed')}
-                        style={styles.header_button}
+                    <NextFunctionButton
+                        score={score}
+                        shuffledFunctions={shuffledFunctions}
+                        currentFunction={currentFunction}
+                        setCurrentFunction={setCurrentFunction}
+                        setPoints={setPoints}
+                        setResetTimer={setResetTimer}
+                        setDrawing={setDrawing}
                     >
-                        <Text style={styles.header_button_text}>
-                            {'Fonction suivante'}
-                        </Text>
-                    </Pressable>
+                    </NextFunctionButton>
                 </View>
             </View>
 
