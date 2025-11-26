@@ -1,4 +1,3 @@
-import { GestureResponderEvent } from "react-native";
 import { PointsType } from "./PointsType";
 import { Dispatch, SetStateAction } from "react";
 import { FunctionType } from "./FunctionType";
