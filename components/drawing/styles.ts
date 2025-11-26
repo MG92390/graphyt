@@ -31,5 +31,9 @@ export const styles = StyleSheet.create({
     },
     header_button_text: {
         fontSize: 14,
+    },
+    header_button_placeholder: {
+        alignItems: 'center',
+        flex: 0.2,
     }
 });

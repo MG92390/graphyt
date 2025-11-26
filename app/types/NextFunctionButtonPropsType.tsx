@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 import { FunctionType } from "./FunctionType";
 
 export type NextFunctionButtonPropsType = {
+    drawing: boolean,
     score: number,
     shuffledFunctions: Array<FunctionType>,
     currentFunction: number,

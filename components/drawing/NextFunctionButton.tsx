@@ -1,4 +1,4 @@
-import { Alert, Pressable, Text } from "react-native";
+import { Alert, Pressable, Text, View } from "react-native";
 import React from "react";
 import { styles } from "./styles";
 import { NextFunctionButtonPropsType } from "@/app/types/NextFunctionButtonPropsType";
@@ -8,22 +8,27 @@ import { NextFunctionButtonPropsType } from "@/app/types/NextFunctionButtonProps
  * @returns 
  */
 export default function NextFunctionButton(props: Readonly<NextFunctionButtonPropsType>) {
-
+    if (!props.drawing) {
+        return (
+            <Pressable
+                onPress={() => {
+                    Alert.alert('Round terminé', `Votre score : ${Math.round(props.score)}`);
+                    props.setPoints([]);
+                    props.setCurrentFunction((prev) => (prev + 1) % props.shuffledFunctions.length);
+                    props.setResetTimer(true); // Réinitialise le timer
+                    props.setDrawing(true)
+                }}
+                style={styles.header_button}
+            >
+                <Text
+                    style={styles.header_button_text}>{'Fonction suivante'}
+                </Text>
+            </Pressable>
+        )
+    }
     return (
-        {props.drawing ? 
-        <Pressable
-            onPress={() => {
-                Alert.alert('Round terminé', `Votre score : ${Math.round(props.score)}`);
-                props.setPoints([]);
-                props.setCurrentFunction((prev) => (prev + 1) % props.shuffledFunctions.length);
-                props.setResetTimer(true); // Réinitialise le timer
-                props.setDrawing(true)
-            }}
-            style={styles.header_button}
-        >
-            <Text
-                style={styles.header_button_text}>{'Fonction suivante'}
-            </Text>
-        </Pressable>
+        <View style={styles.header_button_placeholder}>
+
+        </View>
     )
 }
