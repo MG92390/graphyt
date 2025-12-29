@@ -25,12 +25,11 @@ export default function DrawingScreen() {
         { name: 'f(x) = x³', formula: (x: number) => x * x * x },
         { name: 'f(x) = exp(x)', formula: (x: number) => Math.exp(x) },
         { name: 'f(x) = 1/x', formula: (x: number) => 1 / x },
-        { name: 'f(x) = ln(x)', formula: (x: number) => Math.log(x) },
+        { name: 'f(x) = log(x)', formula: (x: number) => Math.log(x) },
     ];
     const GRID_SIZE_Y = Math.max(Math.floor(SCREEN_HEIGHT / 58), 11);
     const GRID_SIZE_X = Math.max(Math.floor(SCREEN_WIDTH / 44), 8);
 
-    const [shuffledFunctions, setShuffledFunctions] = useState(FUNCTIONS);
     const [currentFunction, setCurrentFunction] = useState(0);
     const [points, setPoints] = useState<Array<PointsType>>([]);
     const [actualPoints, setActualPoints] = useState<Array<PointsType>>([]);
@@ -42,7 +41,6 @@ export default function DrawingScreen() {
     //Timer
     useEffect(() => {
         if (resetTimer) {
-            console.log("resetTimer")
             setResetTimer(false)
             setTimeLeft(20000000)
             setActualPoints([])
@@ -70,7 +68,7 @@ export default function DrawingScreen() {
                 const { moveX, moveY } = gestureState;
                 const newPoint = { x: moveX, y: moveY };
                 setPoints((prev) => [...prev, newPoint]);
-                const corrected_y = computePointsY(shuffledFunctions[currentFunction], newPoint.x)
+                const corrected_y = computePointsY(FUNCTIONS[currentFunction], newPoint.x)
                 if (!Number.isNaN(corrected_y)) {
                     actualPoints.push({
                         x: newPoint.x,
@@ -183,7 +181,7 @@ export default function DrawingScreen() {
             <View style={styles.header}>
                 <View style={styles.header_text}>
                     <Text style={styles.functionText}>
-                        {shuffledFunctions[currentFunction]?.name || ''}
+                        {FUNCTIONS[currentFunction]?.name || ''}
                     </Text>
                     <Animated.Text style={styles.score}>
                         Score: {Math.round(score)}
@@ -198,7 +196,7 @@ export default function DrawingScreen() {
                     <ValidationButton
                         drawing={drawing}
                         points={points}
-                        shuffledFunctions={shuffledFunctions}
+                        shuffledFunctions={FUNCTIONS}
                         currentFunction={currentFunction}
                         setScore={setScore}
                         setTimeLeft={setTimeLeft}
@@ -208,7 +206,7 @@ export default function DrawingScreen() {
                     <NextFunctionButton
                         drawing={drawing}
                         score={score}
-                        shuffledFunctions={shuffledFunctions}
+                        shuffledFunctions={FUNCTIONS}
                         currentFunction={currentFunction}
                         setCurrentFunction={setCurrentFunction}
                         setPoints={setPoints}
