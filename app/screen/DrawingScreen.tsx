@@ -3,12 +3,12 @@ import { Animated, View, Text, PanResponder, ScrollView } from 'react-native';
 import Svg, { Line, Circle } from 'react-native-svg';
 import EraseButton from '@/components/drawing/EraseButton';
 import { PointsType } from '../types/PointsType';
-import { FunctionType } from '../types/FunctionType';
 import ValidationButton from '@/components/drawing/ValidationButton';
 import NextFunctionButton from '@/components/drawing/NextFunctionButton';
 import { styles } from './styles';
 import { computePointsY } from '../services/ComputePoints';
 import { SCALE, SCREEN_HEIGHT, SCREEN_WIDTH } from '../services/DrawingDimensions';
+import { MATH_FUNCTIONS } from '../services/MathFunctions';
 
 /**
  * Screen for drawing the function
@@ -18,15 +18,7 @@ export default function DrawingScreen() {
     const offset_x = SCREEN_WIDTH * 0.05
     const offset_y = SCREEN_HEIGHT * 0.3
 
-    const FUNCTIONS: Array<FunctionType> = [
-        { name: 'f(x) = x', formula: (x: number) => x },
-        { name: 'f(x) = -x', formula: (x: number) => -x },
-        { name: 'f(x) = x²', formula: (x: number) => x * x },
-        { name: 'f(x) = x³', formula: (x: number) => x * x * x },
-        { name: 'f(x) = exp(x)', formula: (x: number) => Math.exp(x) },
-        { name: 'f(x) = 1/x', formula: (x: number) => 1 / x },
-        { name: 'f(x) = log(x)', formula: (x: number) => Math.log(x) },
-    ];
+
     const GRID_SIZE_Y = Math.max(Math.floor(SCREEN_HEIGHT / 58), 11);
     const GRID_SIZE_X = Math.max(Math.floor(SCREEN_WIDTH / 44), 8);
 
@@ -68,7 +60,7 @@ export default function DrawingScreen() {
                 const { moveX, moveY } = gestureState;
                 const newPoint = { x: moveX, y: moveY };
                 setPoints((prev) => [...prev, newPoint]);
-                const corrected_y = computePointsY(FUNCTIONS[currentFunction], newPoint.x)
+                const corrected_y = computePointsY(MATH_FUNCTIONS[currentFunction], newPoint.x)
                 if (!Number.isNaN(corrected_y)) {
                     actualPoints.push({
                         x: newPoint.x,
@@ -181,7 +173,7 @@ export default function DrawingScreen() {
             <View style={styles.header}>
                 <View style={styles.header_text}>
                     <Text style={styles.functionText}>
-                        {FUNCTIONS[currentFunction]?.name || ''}
+                        {MATH_FUNCTIONS[currentFunction]?.name || ''}
                     </Text>
                     <Animated.Text style={styles.score}>
                         Score: {Math.round(score)}
@@ -196,7 +188,7 @@ export default function DrawingScreen() {
                     <ValidationButton
                         drawing={drawing}
                         points={points}
-                        shuffledFunctions={FUNCTIONS}
+                        shuffledFunctions={MATH_FUNCTIONS}
                         currentFunction={currentFunction}
                         setScore={setScore}
                         setTimeLeft={setTimeLeft}
@@ -206,7 +198,7 @@ export default function DrawingScreen() {
                     <NextFunctionButton
                         drawing={drawing}
                         score={score}
-                        shuffledFunctions={FUNCTIONS}
+                        shuffledFunctions={MATH_FUNCTIONS}
                         currentFunction={currentFunction}
                         setCurrentFunction={setCurrentFunction}
                         setPoints={setPoints}
