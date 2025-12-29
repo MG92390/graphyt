@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Animated, View, Text, Dimensions, PanResponder, ScrollView } from 'react-native';
 import Svg, { Line, Circle } from 'react-native-svg';
-import { useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import EraseButton from '@/components/drawing/EraseButton';
 import { PointsType } from '../types/PointsType';
 import { FunctionType } from '../types/FunctionType';
 import ValidationButton from '@/components/drawing/ValidationButton';
 import NextFunctionButton from '@/components/drawing/NextFunctionButton';
-import { styles } from './style';
+import { styles } from './styles';
+import { computePointsY } from '../services/ComputePoints';
+import { SCALE, SCREEN_HEIGHT, SCREEN_WIDTH, X_MAX } from '../services/DrawingDimensions';
 
 /**
  * Screen for drawing the function
  * @returns 
  */
 export default function DrawingScreen() {
-    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+    const offset_x = SCREEN_WIDTH * 0.05
+    const offset_y = SCREEN_HEIGHT * 0.3
+
     const FUNCTIONS: Array<FunctionType> = [
         { name: 'f(x) = x', formula: (x: number) => x },
         { name: 'f(x) = -x', formula: (x: number) => -x },
@@ -24,21 +27,25 @@ export default function DrawingScreen() {
         { name: 'f(x) = 1/x', formula: (x: number) => 1 / x },
         { name: 'f(x) = ln(x)', formula: (x: number) => Math.log(x) },
     ];
-    const GRID_SIZE_Y = Math.max(Math.floor(SCREEN_HEIGHT / 58), 10);
-    const GRID_SIZE_X = Math.max(Math.floor(SCREEN_WIDTH / 46), 10);
-    const SCALE = 40;
+    const GRID_SIZE_Y = Math.max(Math.floor(SCREEN_HEIGHT / 58), 11);
+    const GRID_SIZE_X = Math.max(Math.floor(SCREEN_WIDTH / 44), 8);
+
     const [shuffledFunctions, setShuffledFunctions] = useState(FUNCTIONS);
     const [currentFunction, setCurrentFunction] = useState(0);
     const [points, setPoints] = useState<Array<PointsType>>([]);
+    const [actualPoints, setActualPoints] = useState<Array<PointsType>>([]);
     const [drawing, setDrawing] = useState(true);
-    const [timeLeft, setTimeLeft] = useState(120); // 2 minutes in seconds
+    const [timeLeft, setTimeLeft] = useState(20000000); // 2 minutes in seconds
     const [resetTimer, setResetTimer] = useState(false); // 2 minutes in seconds
     const [score, setScore] = useState(0);
 
+    //Timer
     useEffect(() => {
         if (resetTimer) {
+            console.log("resetTimer")
             setResetTimer(false)
-            setTimeLeft(120)
+            setTimeLeft(20000000)
+            setActualPoints([])
         }
         const interval = setInterval(() => {
             setTimeLeft((prev) => {
@@ -54,25 +61,27 @@ export default function DrawingScreen() {
         return () => clearInterval(interval);
     }, [resetTimer]);
 
-    const scoreStyle = useAnimatedStyle(() => {
-        return {
-            transform: [{ scale: withSpring(score > 80 ? 1.2 : 1) }],
-        };
-    });
-
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onMoveShouldSetPanResponder: () => true,
         onPanResponderMove: (_, gestureState) => {
+            //Allow to draw circles
             if (drawing) {
                 const { moveX, moveY } = gestureState;
                 const newPoint = { x: moveX, y: moveY };
                 setPoints((prev) => [...prev, newPoint]);
+                const corrected_y = computePointsY(shuffledFunctions[currentFunction], newPoint.x)
+                if (!Number.isNaN(corrected_y)) {
+                    actualPoints.push({
+                        x: newPoint.x,
+                        y: corrected_y
+                    })
+                }
             }
         },
     });
 
-
+    //Render the grid
     const renderGrid = () => {
         const lines = [];
         // Vertical lines
@@ -85,7 +94,7 @@ export default function DrawingScreen() {
                         x1={x * SCALE}
                         y1={0}
                         x2={x * SCALE}
-                        y2={GRID_SIZE_X * 58}
+                        y2={GRID_SIZE_X * 70}
                         stroke="#a61c1cff"
                         strokeWidth="1"
                     />
@@ -98,7 +107,7 @@ export default function DrawingScreen() {
                         x1={x * SCALE}
                         y1={0}
                         x2={x * SCALE}
-                        y2={GRID_SIZE_X * 58}
+                        y2={GRID_SIZE_X * 70}
                         stroke="#e0e0e0"
                         strokeWidth="1"
                     />
@@ -140,17 +149,32 @@ export default function DrawingScreen() {
         return lines;
     };
 
+    //Render the points on the grid
     const renderPoints = () => {
         return points.map((point, index) => (
             <Circle
                 key={index}
-                cx={point.x - SCREEN_WIDTH * 0.05}
-                cy={point.y - SCREEN_HEIGHT * 0.3}
+                cx={point.x - offset_x}
+                cy={point.y - offset_y}
                 r="4"
                 fill="#6366f1"
             />
         ));
     };
+
+    //Render the correct points
+    const renderActualPoints = () => {
+        return actualPoints.map((point, index) => (
+            <Circle
+                key={index}
+                cx={point.x - offset_x}
+                cy={point.y - offset_y}
+                r="4"
+                fill="#b71e13ff"
+            />
+        ));
+    }
+
     return (
         <ScrollView contentContainerStyle={[styles.container,
         { minHeight: 500 },
@@ -161,7 +185,7 @@ export default function DrawingScreen() {
                     <Text style={styles.functionText}>
                         {shuffledFunctions[currentFunction]?.name || ''}
                     </Text>
-                    <Animated.Text style={[styles.score, scoreStyle]}>
+                    <Animated.Text style={styles.score}>
                         Score: {Math.round(score)}
                     </Animated.Text>
                     <Text style={styles.timer}>Timer : {timeLeft}s</Text>
@@ -208,6 +232,8 @@ export default function DrawingScreen() {
                 } >
                     {renderGrid()}
                     {renderPoints()}
+                    {renderActualPoints()}
+                    {timeLeft == 0 ? renderActualPoints() : null}
                 </Svg>
             </Animated.View>
         </ScrollView >
