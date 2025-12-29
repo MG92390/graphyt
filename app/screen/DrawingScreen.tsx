@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Animated, View, Text, Dimensions, PanResponder, ScrollView } from 'react-native';
+import { Animated, View, Text, PanResponder, ScrollView } from 'react-native';
 import Svg, { Line, Circle } from 'react-native-svg';
 import EraseButton from '@/components/drawing/EraseButton';
 import { PointsType } from '../types/PointsType';
@@ -8,7 +8,7 @@ import ValidationButton from '@/components/drawing/ValidationButton';
 import NextFunctionButton from '@/components/drawing/NextFunctionButton';
 import { styles } from './styles';
 import { computePointsY } from '../services/ComputePoints';
-import { SCALE, SCREEN_HEIGHT, SCREEN_WIDTH, X_MAX } from '../services/DrawingDimensions';
+import { SCALE, SCREEN_HEIGHT, SCREEN_WIDTH } from '../services/DrawingDimensions';
 
 /**
  * Screen for drawing the function
