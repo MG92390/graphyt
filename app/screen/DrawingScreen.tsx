@@ -7,7 +7,7 @@ import ValidationButton from '@/components/drawing/ValidationButton';
 import NextFunctionButton from '@/components/drawing/NextFunctionButton';
 import { styles } from './styles';
 import { computePointsY } from '../services/ComputePoints';
-import { SCALE, SCREEN_HEIGHT, SCREEN_WIDTH } from '../services/DrawingDimensions';
+import { SCALE, SCREEN_HEIGHT, SCREEN_WIDTH, X_MAX, X_MIN } from '../services/DrawingDimensions';
 import { MATH_FUNCTIONS } from '../services/MathFunctions';
 
 /**
@@ -29,6 +29,7 @@ export default function DrawingScreen() {
     const [timeLeft, setTimeLeft] = useState(20000000); // 2 minutes in seconds
     const [resetTimer, setResetTimer] = useState(false); // 2 minutes in seconds
     const [score, setScore] = useState(0);
+    const [isCorrection, setIsCorrection] = useState(false);
 
     //Timer
     useEffect(() => {
@@ -36,6 +37,7 @@ export default function DrawingScreen() {
             setResetTimer(false)
             setTimeLeft(20000000)
             setActualPoints([])
+            setIsCorrection(false)
         }
         const interval = setInterval(() => {
             setTimeLeft((prev) => {
@@ -51,6 +53,19 @@ export default function DrawingScreen() {
         return () => clearInterval(interval);
     }, [resetTimer]);
 
+    //Correction
+    useEffect(() => {
+        for (let x = X_MIN; x <= X_MAX; x += 0.1) {
+            const corrected_y = computePointsY(MATH_FUNCTIONS[currentFunction], x)
+            if (!Number.isNaN(corrected_y)) {
+                actualPoints.push({
+                    x: x,
+                    y: corrected_y
+                })
+            }
+        }
+    }, [isCorrection]);
+
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onMoveShouldSetPanResponder: () => true,
@@ -60,13 +75,6 @@ export default function DrawingScreen() {
                 const { moveX, moveY } = gestureState;
                 const newPoint = { x: moveX, y: moveY };
                 setPoints((prev) => [...prev, newPoint]);
-                const corrected_y = computePointsY(MATH_FUNCTIONS[currentFunction], newPoint.x)
-                if (!Number.isNaN(corrected_y)) {
-                    actualPoints.push({
-                        x: newPoint.x,
-                        y: corrected_y
-                    })
-                }
             }
         },
     });
@@ -193,6 +201,7 @@ export default function DrawingScreen() {
                         setScore={setScore}
                         setTimeLeft={setTimeLeft}
                         setDrawing={setDrawing}
+                        setIsCorrection={setIsCorrection}
                     >
                     </ValidationButton>
                     <NextFunctionButton
@@ -222,7 +231,6 @@ export default function DrawingScreen() {
                 } >
                     {renderGrid()}
                     {renderPoints()}
-                    {renderActualPoints()}
                     {timeLeft == 0 ? renderActualPoints() : null}
                 </Svg>
             </Animated.View>
