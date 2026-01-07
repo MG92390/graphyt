@@ -17,6 +17,10 @@ export default function ValidationButton(props: Readonly<ValidationButtonPropsTy
             currentFunction: number,
             score: number,
             setScore: Dispatch<SetStateAction<number>>): void => {
+            //If there is no point, don't compute anything
+            if (points.length == 0) {
+                return
+            }
             const actualPoints = points.map((p) => ({
                 x: p.x,
                 y: computePointsY(MATH_FUNCTIONS[currentFunction], p.x),
