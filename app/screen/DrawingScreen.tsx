@@ -188,7 +188,7 @@ export default function DrawingScreen() {
                     <ValidationButton
                         drawing={drawing}
                         points={points}
-                        shuffledFunctions={MATH_FUNCTIONS}
+                        score={score}
                         currentFunction={currentFunction}
                         setScore={setScore}
                         setTimeLeft={setTimeLeft}

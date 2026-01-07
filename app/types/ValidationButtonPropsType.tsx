@@ -1,11 +1,10 @@
 import { PointsType } from "./PointsType";
 import { Dispatch, SetStateAction } from "react";
-import { FunctionType } from "./FunctionType";
 
 export type ValidationButtonPropsType = {
     drawing: boolean,
     points: Array<PointsType>,
-    shuffledFunctions: Array<FunctionType>,
+    score: number,
     currentFunction: number,
     setScore: Dispatch<SetStateAction<number>>,
     setTimeLeft: Dispatch<SetStateAction<number>>,

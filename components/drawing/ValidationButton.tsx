@@ -2,8 +2,9 @@ import { Pressable, Text } from "react-native";
 import React, { Dispatch, SetStateAction, useCallback } from "react";
 import { styles } from "./styles";
 import { ValidationButtonPropsType } from "@/app/types/ValidationButtonPropsType";
-import { FunctionType } from "@/app/types/FunctionType";
 import { PointsType } from "@/app/types/PointsType";
+import { computePointsY } from "@/app/services/ComputePoints";
+import { MATH_FUNCTIONS } from "@/app/services/MathFunctions";
 
 /**
  * Button that stop the timer and calculate the score.
@@ -13,21 +14,25 @@ export default function ValidationButton(props: Readonly<ValidationButtonPropsTy
 
     const calculateScore = useCallback(
         (points: Array<PointsType>,
-            shuffledFunctions: Array<FunctionType>,
             currentFunction: number,
+            score: number,
             setScore: Dispatch<SetStateAction<number>>): void => {
             const actualPoints = points.map((p) => ({
                 x: p.x,
-                y: shuffledFunctions[currentFunction].formula(p.x),
+                y: computePointsY(MATH_FUNCTIONS[currentFunction], p.x),
             }));
 
+            //Compute the distance between the corrected point and the point drawn
             const distances = points.map((p, i) =>
                 Math.abs(p.y - actualPoints[i]?.y || 0)
             );
 
             const avgDistance = distances.reduce((a, b) => a + b, 0) / distances.length;
-            const newScore = Math.max(0, 100 - avgDistance * 20);
-            setScore(newScore);
+            const isCorrect = Math.max(0, 100 - avgDistance * 20);
+            //If the points are closed enough to the correction, add 1 point to score
+            if (isCorrect != 0) {
+                setScore(score + 1);
+            }
         }, []);
 
     return (
@@ -35,7 +40,7 @@ export default function ValidationButton(props: Readonly<ValidationButtonPropsTy
             onPress={() => {
                 props.setTimeLeft(0);
                 props.setDrawing(false);
-                calculateScore(props.points, props.shuffledFunctions, props.currentFunction, props.setScore);
+                calculateScore(props.points, props.currentFunction, props.score, props.setScore);
             }
             }
             style={props.drawing ? styles.header_button : styles.header_button_disabled}
