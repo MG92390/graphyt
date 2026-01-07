@@ -18,13 +18,12 @@ export default function DrawingScreen() {
     const offset_x = SCREEN_WIDTH * 0.05
     const offset_y = SCREEN_HEIGHT * 0.3
 
-
     const GRID_SIZE_Y = Math.max(Math.floor(SCREEN_HEIGHT / 58), 11);
     const GRID_SIZE_X = Math.max(Math.floor(SCREEN_WIDTH / 44), 8);
 
     const [currentFunction, setCurrentFunction] = useState(0);
     const [points, setPoints] = useState<Array<PointsType>>([]);
-    const [actualPoints, setActualPoints] = useState<Array<PointsType>>([]);
+    const [correctPoints, setCorrectPoints] = useState<Array<PointsType>>([]);
     const [drawing, setDrawing] = useState(true);
     const [timeLeft, setTimeLeft] = useState(20000000); // 2 minutes in seconds
     const [resetTimer, setResetTimer] = useState(false); // 2 minutes in seconds
@@ -36,7 +35,7 @@ export default function DrawingScreen() {
         if (resetTimer) {
             setResetTimer(false)
             setTimeLeft(20000000)
-            setActualPoints([])
+            setCorrectPoints([])
             setIsCorrection(false)
         }
         const interval = setInterval(() => {
@@ -58,7 +57,7 @@ export default function DrawingScreen() {
         for (let x = X_MIN; x <= X_MAX; x += 0.1) {
             const corrected_y = computePointsY(MATH_FUNCTIONS[currentFunction], x)
             if (!Number.isNaN(corrected_y)) {
-                actualPoints.push({
+                correctPoints.push({
                     x: x,
                     y: corrected_y
                 })
@@ -161,8 +160,8 @@ export default function DrawingScreen() {
     };
 
     //Render the correct points
-    const renderActualPoints = () => {
-        return actualPoints.map((point, index) => (
+    const renderCorrectionPoints = () => {
+        return correctPoints.map((point, index) => (
             <Circle
                 key={index}
                 cx={point.x - offset_x}
@@ -231,7 +230,7 @@ export default function DrawingScreen() {
                 } >
                     {renderGrid()}
                     {renderPoints()}
-                    {timeLeft == 0 ? renderActualPoints() : null}
+                    {timeLeft == 0 ? renderCorrectionPoints() : null}
                 </Svg>
             </Animated.View>
         </ScrollView >
