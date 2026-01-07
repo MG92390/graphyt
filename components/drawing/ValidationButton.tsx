@@ -32,7 +32,7 @@ export default function ValidationButton(props: Readonly<ValidationButtonPropsTy
             );
 
             const avgDistance = distances.reduce((a, b) => a + b, 0) / distances.length;
-            const isCorrect = Math.max(0, 100 - avgDistance * 20);
+            const isCorrect = Math.max(0, 500 - avgDistance * 20);
             //If the points are closed enough to the correction, add 1 point to score
             if (isCorrect != 0) {
                 setScore(score + 1);
