@@ -1,6 +1,12 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+    animated_view: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "space-evenly",
+        width: "100%",
+    },
     container: {
         justifyContent: "space-evenly",
         flex: 1,
