@@ -12,8 +12,6 @@ export default function NextFunctionButton(props: Readonly<NextFunctionButtonPro
         return (
             <Pressable
                 onPress={() => {
-                    props.setPoints([]);
-                    props.setCurrentFunction((prev) => (prev + 1) % props.shuffledFunctions.length);
                     props.setResetDrawing(true); // Reset the drawing screen
                     props.setTimerRunning(true)
                 }}
