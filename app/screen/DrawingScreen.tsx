@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Animated, View, Text, PanResponder, ScrollView } from 'react-native';
 import Svg, { Line, Circle } from 'react-native-svg';
 import EraseButton from '@/components/drawing/EraseButton';
@@ -21,36 +21,46 @@ export default function DrawingScreen() {
     const GRID_SIZE_Y = Math.max(Math.floor(SCREEN_HEIGHT / 58), 11);
     const GRID_SIZE_X = Math.max(Math.floor(SCREEN_WIDTH / 44), 8);
 
+    const init_timer = 2000000;
+
     const [currentFunction, setCurrentFunction] = useState(0);
     const [points, setPoints] = useState<Array<PointsType>>([]);
     const [correctPoints, setCorrectPoints] = useState<Array<PointsType>>([]);
     const [drawing, setDrawing] = useState(true);
-    const [timeLeft, setTimeLeft] = useState(20000000); // 2 minutes in seconds
-    const [resetTimer, setResetTimer] = useState(false); // 2 minutes in seconds
+    const [timeLeft, setTimeLeft] = useState(init_timer); // 30sec
+    const [timerRunning, setTimerRunning] = useState(true);
     const [score, setScore] = useState(0);
     const [isCorrection, setIsCorrection] = useState(false);
+    const [resetDrawing, setResetDrawing] = useState(false);
+    const [resetModalVisible, setResetModalVisible] = useState(false);
 
-    //Timer
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     useEffect(() => {
-        if (resetTimer) {
-            setResetTimer(false)
-            setTimeLeft(20000000)
-            setCorrectPoints([])
-            setIsCorrection(false)
-        }
-        const interval = setInterval(() => {
+        if (!timerRunning) return;
+        intervalRef.current ??= setInterval(() => {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
-                    clearInterval(interval);
-                    setDrawing(false);
                     return 0;
                 }
                 return prev - 1;
             });
         }, 1000);
+        return () => {
+            if (intervalRef.current !== null) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
+        };
+    }, [timerRunning])
 
-        return () => clearInterval(interval);
-    }, [resetTimer]);
+    //Reset drawing
+    useEffect(() => {
+        if (resetDrawing) {
+            setCorrectPoints([])
+            setIsCorrection(false)
+            setDrawing(true)
+        }
+    }, [resetDrawing]);
 
     //Correction
     useEffect(() => {
@@ -71,6 +81,7 @@ export default function DrawingScreen() {
         onPanResponderMove: (_, gestureState) => {
             //Allow to draw circles
             if (drawing) {
+                setResetDrawing(false)
                 const { moveX, moveY } = gestureState;
                 const newPoint = { x: moveX, y: moveY };
                 setPoints((prev) => [...prev, newPoint]);
@@ -201,6 +212,7 @@ export default function DrawingScreen() {
                         setTimeLeft={setTimeLeft}
                         setDrawing={setDrawing}
                         setIsCorrection={setIsCorrection}
+                        setTimerRunning={setTimerRunning}
                     >
                     </ValidationButton>
                     <NextFunctionButton
@@ -210,19 +222,15 @@ export default function DrawingScreen() {
                         currentFunction={currentFunction}
                         setCurrentFunction={setCurrentFunction}
                         setPoints={setPoints}
-                        setResetTimer={setResetTimer}
+                        setResetDrawing={setResetDrawing}
                         setDrawing={setDrawing}
+                        setTimerRunning={setTimerRunning}
                     >
                     </NextFunctionButton>
                 </View>
             </View>
 
-            <Animated.View style={{
-                flex: 1,
-                alignItems: "center",
-                justifyContent: "space-evenly",
-                width: "100%",
-            }}
+            <Animated.View style={styles.animated_view}
                 {...panResponder.panHandlers}
             >
                 <Svg style={
@@ -230,7 +238,7 @@ export default function DrawingScreen() {
                 } >
                     {renderGrid()}
                     {renderPoints()}
-                    {timeLeft == 0 ? renderCorrectionPoints() : null}
+                    {isCorrection ? renderCorrectionPoints() : <Text>Test</Text>}
                 </Svg>
             </Animated.View>
         </ScrollView >

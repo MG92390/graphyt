@@ -10,4 +10,5 @@ export type ValidationButtonPropsType = {
     setTimeLeft: Dispatch<SetStateAction<number>>,
     setDrawing: Dispatch<SetStateAction<boolean>>,
     setIsCorrection: Dispatch<SetStateAction<boolean>>,
+    setTimerRunning: Dispatch<SetStateAction<boolean>>,
 }

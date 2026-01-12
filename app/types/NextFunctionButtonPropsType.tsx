@@ -9,6 +9,7 @@ export type NextFunctionButtonPropsType = {
     currentFunction: number,
     setCurrentFunction: Dispatch<SetStateAction<number>>,
     setPoints: Dispatch<SetStateAction<Array<PointsType>>>,
-    setResetTimer: Dispatch<SetStateAction<boolean>>,
+    setResetDrawing: Dispatch<SetStateAction<boolean>>,
     setDrawing: Dispatch<SetStateAction<boolean>>,
+    setTimerRunning: Dispatch<SetStateAction<boolean>>,
 }

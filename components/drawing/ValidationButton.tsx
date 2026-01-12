@@ -42,9 +42,9 @@ export default function ValidationButton(props: Readonly<ValidationButtonPropsTy
     return (
         <Pressable
             onPress={() => {
-                props.setTimeLeft(0);
                 props.setDrawing(false);
                 props.setIsCorrection(true);
+                props.setTimerRunning(false);
                 calculateScore(props.points, props.currentFunction, props.score, props.setScore);
             }
             }

@@ -12,11 +12,10 @@ export default function NextFunctionButton(props: Readonly<NextFunctionButtonPro
         return (
             <Pressable
                 onPress={() => {
-                    Alert.alert('Round terminé', `Votre score : ${Math.round(props.score)}`);
                     props.setPoints([]);
                     props.setCurrentFunction((prev) => (prev + 1) % props.shuffledFunctions.length);
-                    props.setResetTimer(true); // Réinitialise le timer
-                    props.setDrawing(true)
+                    props.setResetDrawing(true); // Reset the drawing screen
+                    props.setTimerRunning(true)
                 }}
                 style={styles.header_button}
             >
