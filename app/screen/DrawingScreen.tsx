@@ -9,6 +9,7 @@ import { styles } from './styles';
 import { computePointsY } from '../services/ComputePoints';
 import { SCALE, SCREEN_HEIGHT, SCREEN_WIDTH, X_MAX, X_MIN } from '../services/DrawingDimensions';
 import { MATH_FUNCTIONS } from '../services/MathFunctions';
+import ResetModal from '@/components/reset/ResetModal';
 
 /**
  * Screen for drawing the function
@@ -21,7 +22,7 @@ export default function DrawingScreen() {
     const GRID_SIZE_Y = Math.max(Math.floor(SCREEN_HEIGHT / 58), 11);
     const GRID_SIZE_X = Math.max(Math.floor(SCREEN_WIDTH / 44), 8);
 
-    const init_timer = 2000000;
+    const init_timer = 30;
 
     const [currentFunction, setCurrentFunction] = useState(0);
     const [points, setPoints] = useState<Array<PointsType>>([]);
@@ -29,17 +30,20 @@ export default function DrawingScreen() {
     const [drawing, setDrawing] = useState(true);
     const [timeLeft, setTimeLeft] = useState(init_timer); // 30sec
     const [timerRunning, setTimerRunning] = useState(true);
+    const [resetTimer, setResetTimer] = useState(false);
     const [score, setScore] = useState(0);
     const [isCorrection, setIsCorrection] = useState(false);
     const [resetDrawing, setResetDrawing] = useState(false);
     const [resetModalVisible, setResetModalVisible] = useState(false);
 
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    //Timer
     useEffect(() => {
         if (!timerRunning) return;
         intervalRef.current ??= setInterval(() => {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
+                    setResetModalVisible(true)
                     return 0;
                 }
                 return prev - 1;
@@ -53,12 +57,29 @@ export default function DrawingScreen() {
         };
     }, [timerRunning])
 
+    //Reset timer
+    useEffect(() => {
+        if (resetTimer) {
+            setTimerRunning(true)
+            setTimeLeft(init_timer)
+            setDrawing(true)
+            setCorrectPoints([])
+            setPoints([])
+            setCurrentFunction(0)
+            setScore(0)
+            setResetModalVisible(false)
+        }
+    }, [resetTimer])
+
     //Reset drawing
     useEffect(() => {
         if (resetDrawing) {
+            setPoints([])
             setCorrectPoints([])
             setIsCorrection(false)
             setDrawing(true)
+            setCurrentFunction((prev) => (prev + 1) % MATH_FUNCTIONS.length);
+            setResetDrawing(false)
         }
     }, [resetDrawing]);
 
@@ -73,7 +94,7 @@ export default function DrawingScreen() {
                 })
             }
         }
-    }, [isCorrection]);
+    }, [currentFunction]);
 
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
@@ -188,6 +209,12 @@ export default function DrawingScreen() {
         { minHeight: 500 },
         ]
         }>
+            <ResetModal
+                resetModalVisible={resetModalVisible}
+                setResetModalVisible={setResetModalVisible}
+                setResetTimer={setResetTimer}>
+
+            </ResetModal>
             <View style={styles.header}>
                 <View style={styles.header_text}>
                     <Text style={styles.functionText}>
