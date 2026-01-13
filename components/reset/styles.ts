@@ -2,8 +2,8 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     centeredView: {
-        flex: 0.8,
-        width: "80%",
+        flex: 1,
+        width: "100%",
         alignContent: "center",
         alignItems: "center",
         justifyContent: "center",
@@ -37,12 +37,12 @@ export const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
-        width: '100%',
-        flex: 1,
+        width: '80%',
+        flex: 0.5,
     },
     view_reset_modal: {
         flex: 1,
-        width: "80%",
+        width: "50%",
         alignContent: "center",
         alignItems: "center",
         justifyContent: "center",
