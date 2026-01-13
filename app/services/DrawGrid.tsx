@@ -1,24 +1,24 @@
 import { Line } from "react-native-svg";
-import { GRID_SIZE_X, GRID_SIZE_Y, SCALE, SCREEN_WIDTH } from "./DrawingDimensions";
+import { GRID_SIZE_Y, SCALE, SCREEN_WIDTH } from "./DrawingDimensions";
 import React from "react";
 
 /**
  * Draw a SVG grid
  */
 
-export function drawGrid(): React.JSX.Element[] {
+export function drawGrid(grid_size_x: number): React.JSX.Element[] {
     const lines = [];
     // Vertical lines
-    for (let x = 0; x <= GRID_SIZE_X; x++) {
+    for (let x = 0; x <= grid_size_x; x++) {
         //Set the Y-axis
-        if (x == Math.floor(GRID_SIZE_X / 2)) {
+        if (x == Math.floor(grid_size_x / 2)) {
             lines.push(
                 <Line
                     key={`v-${x}`}
                     x1={x * SCALE}
                     y1={0}
                     x2={x * SCALE}
-                    y2={GRID_SIZE_X * 70}
+                    y2={grid_size_x * 70}
                     stroke="#a61c1cff"
                     strokeWidth="1"
                 />
@@ -31,7 +31,7 @@ export function drawGrid(): React.JSX.Element[] {
                     x1={x * SCALE}
                     y1={0}
                     x2={x * SCALE}
-                    y2={GRID_SIZE_X * 70}
+                    y2={grid_size_x * 70}
                     stroke="#e0e0e0"
                     strokeWidth="1"
                 />
