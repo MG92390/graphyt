@@ -6,3 +6,5 @@ export const X_MIN = SCREEN_WIDTH * 0.06
 export const Y_MAX = SCREEN_HEIGHT * 0.95
 export const HALF_Y = (Y_MAX + SCREEN_HEIGHT * 0.301) / 2
 export const SCALE = 40;
+export const OFFSET_X = SCREEN_WIDTH * 0.05
+export const OFFSET_Y = SCREEN_HEIGHT * 0.3

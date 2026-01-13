@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Animated, View, Text, PanResponder, ScrollView } from 'react-native';
-import Svg, { Line, Circle } from 'react-native-svg';
+import Svg, { Line } from 'react-native-svg';
 import EraseButton from '@/components/drawing/EraseButton';
 import { PointsType } from '../types/PointsType';
 import ValidationButton from '@/components/drawing/ValidationButton';
@@ -10,15 +10,13 @@ import { computePointsY } from '../services/ComputePoints';
 import { SCALE, SCREEN_HEIGHT, SCREEN_WIDTH, X_MAX, X_MIN } from '../services/DrawingDimensions';
 import { MATH_FUNCTIONS } from '../services/MathFunctions';
 import ResetModal from '@/components/reset/ResetModal';
+import { drawPoints } from '../services/DrawPoints';
 
 /**
  * Screen for drawing the function
  * @returns 
  */
 export default function DrawingScreen() {
-    const offset_x = SCREEN_WIDTH * 0.05
-    const offset_y = SCREEN_HEIGHT * 0.3
-
     const GRID_SIZE_Y = Math.max(Math.floor(SCREEN_HEIGHT / 58), 11);
     const GRID_SIZE_X = Math.max(Math.floor(SCREEN_WIDTH / 44), 8);
 
@@ -180,28 +178,12 @@ export default function DrawingScreen() {
 
     //Render the points on the grid
     const renderPoints = () => {
-        return points.map((point, index) => (
-            <Circle
-                key={index}
-                cx={point.x - offset_x}
-                cy={point.y - offset_y}
-                r="4"
-                fill="#6366f1"
-            />
-        ));
+        return drawPoints(points, "#6366f1");
     };
 
     //Render the correct points
     const renderCorrectionPoints = () => {
-        return correctPoints.map((point, index) => (
-            <Circle
-                key={index}
-                cx={point.x - offset_x}
-                cy={point.y - offset_y}
-                r="4"
-                fill="#b71e13ff"
-            />
-        ));
+        return drawPoints(points, "#b71e13ff");
     }
 
     return (
