@@ -64,6 +64,7 @@ export default function DrawingScreen() {
             setCurrentFunction(0)
             setScore(0)
             setResetModalVisible(false)
+            setResetTimer(false)
         }
     }, [resetTimer])
 
