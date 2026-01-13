@@ -183,7 +183,7 @@ export default function DrawingScreen() {
 
     //Render the correct points
     const renderCorrectionPoints = () => {
-        return drawPoints(points, "#b71e13ff");
+        return drawPoints(correctPoints, "#b71e13ff");
     }
 
     return (
