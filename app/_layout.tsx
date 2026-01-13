@@ -1,7 +1,6 @@
-import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import React, { useEffect } from 'react';
+import React from 'react';
 import 'react-native-reanimated';
 
 import { initialWindowMetrics, SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -10,29 +9,12 @@ import { initialWindowMetrics, SafeAreaProvider, SafeAreaView } from 'react-nati
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <SafeAreaView style={{ flex: 1 }}>
         <Stack
           screenOptions={{
             title: "Projet math",
-            headerTitleStyle: {
-              fontFamily: "Roboto"
-            }
           }}
         >
           <Stack.Screen
