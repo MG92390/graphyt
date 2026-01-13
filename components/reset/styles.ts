@@ -40,11 +40,4 @@ export const styles = StyleSheet.create({
         width: '80%',
         flex: 0.5,
     },
-    view_reset_modal: {
-        flex: 1,
-        width: "50%",
-        alignContent: "center",
-        alignItems: "center",
-        justifyContent: "center",
-    }
 })
