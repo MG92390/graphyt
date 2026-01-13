@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Animated, View, Text, PanResponder, ScrollView } from 'react-native';
-import Svg from 'react-native-svg';
 import EraseButton from '@/components/drawing/EraseButton';
 import { PointsType } from '../types/PointsType';
 import ValidationButton from '@/components/drawing/ValidationButton';
@@ -10,15 +9,14 @@ import { computePointsY } from '../services/ComputePoints';
 import { X_MAX, X_MIN } from '../services/DrawingDimensions';
 import { MATH_FUNCTIONS } from '../services/MathFunctions';
 import ResetModal from '@/components/reset/ResetModal';
-import { drawPoints } from '../services/DrawPoints';
-import { drawGrid } from '../services/DrawGrid';
+import Canva from '@/components/drawing/Canva';
 
 /**
  * Screen for drawing the function
  * @returns 
  */
 export default function DrawingScreen() {
-    const init_timer = 30;
+    const init_timer = 300000000;
 
     const [currentFunction, setCurrentFunction] = useState(0);
     const [points, setPoints] = useState<Array<PointsType>>([]);
@@ -107,16 +105,6 @@ export default function DrawingScreen() {
         },
     });
 
-    //Render the points on the grid
-    const renderPoints = () => {
-        return drawPoints(points, "#6366f1");
-    };
-
-    //Render the correct points
-    const renderCorrectionPoints = () => {
-        return drawPoints(correctPoints, "#b71e13ff");
-    }
-
     return (
         <ScrollView contentContainerStyle={[styles.container,
         { minHeight: 500 },
@@ -174,13 +162,12 @@ export default function DrawingScreen() {
             <Animated.View style={styles.animated_view}
                 {...panResponder.panHandlers}
             >
-                <Svg style={
-                    styles.canvas
-                } >
-                    {drawGrid()}
-                    {renderPoints()}
-                    {isCorrection ? renderCorrectionPoints() : <Text>Test</Text>}
-                </Svg>
+                <Canva
+                    isCorrection={isCorrection}
+                    points={points}
+                    correctPoints={correctPoints}
+                >
+                </Canva>
             </Animated.View>
         </ScrollView >
     )

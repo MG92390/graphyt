@@ -66,11 +66,4 @@ export const styles = StyleSheet.create({
         marginTop: 10,
         justifyContent: "space-evenly",
     },
-    canvas: {
-        flex: 0.9,
-        backgroundColor: '#2b8ebbff',
-        justifyContent: "space-evenly",
-        width: "90%",
-        minHeight: '50%'
-    },
 });

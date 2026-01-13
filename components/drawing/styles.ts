@@ -1,6 +1,14 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+
+    canvas: {
+        flex: 0.9,
+        backgroundColor: '#2b8ebbff',
+        justifyContent: "space-evenly",
+        width: "90%",
+        minHeight: '50%'
+    },
     header_buttons: {
         alignItems: 'center',
         justifyContent: "space-evenly",
