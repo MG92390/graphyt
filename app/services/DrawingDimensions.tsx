@@ -8,3 +8,5 @@ export const HALF_Y = (Y_MAX + SCREEN_HEIGHT * 0.301) / 2
 export const SCALE = 40;
 export const OFFSET_X = SCREEN_WIDTH * 0.05
 export const OFFSET_Y = SCREEN_HEIGHT * 0.3
+export const GRID_SIZE_Y = Math.max(Math.floor(SCREEN_HEIGHT / 58), 11);
+export const GRID_SIZE_X = Math.max(Math.floor(SCREEN_WIDTH / 44), 8);
