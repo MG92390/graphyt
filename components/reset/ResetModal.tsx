@@ -14,8 +14,8 @@ export default function ResetModal(props: Readonly<ResetModalPropsType>) {
             }}>
             <ScrollView contentContainerStyle={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text >
-                        {"WIP"}
+                    <Text style={styles.modalText}>
+                        Ton score : {props.score}
                     </Text>
                     <Pressable
                         style={styles.configButton}

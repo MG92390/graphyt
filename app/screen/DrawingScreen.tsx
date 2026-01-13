@@ -124,6 +124,7 @@ export default function DrawingScreen() {
         }>
             <ResetModal
                 resetModalVisible={resetModalVisible}
+                score={score}
                 setResetModalVisible={setResetModalVisible}
                 setResetTimer={setResetTimer}>
 

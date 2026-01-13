@@ -40,4 +40,7 @@ export const styles = StyleSheet.create({
         width: '80%',
         flex: 0.5,
     },
+    modalText: {
+        fontSize: 20,
+    }
 })
