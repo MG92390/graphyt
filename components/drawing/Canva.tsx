@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text } from "react-native"
 import Svg from "react-native-svg";
-import { drawGrid } from "@/app/services/DrawGrid";
+import { DrawGrid } from "@/app/services/DrawGrid";
 import { renderCorrectionPoints, renderPoints } from "@/app/services/DrawPoints";
 import { CanvaPropsType } from "@/app/types/CanvaPropsType";
 import { SCALE, SCREEN_HEIGHT, SCREEN_WIDTH } from "@/app/services/DrawingDimensions";
@@ -22,6 +22,7 @@ export default function Canva(props: Readonly<CanvaPropsType>) {
         setGridSizeX(gridSizeXTemp)
         const maxHeight = SCREEN_HEIGHT * 0.7
         const gridSizeYTemp = floorEvenNumber(maxHeight / SCALE);
+        console.log("gridSizeYTemp: ", gridSizeYTemp)
         setGridSizeY(gridSizeYTemp)
 
         setStyles(StyleSheet.create({
@@ -35,9 +36,12 @@ export default function Canva(props: Readonly<CanvaPropsType>) {
     }, [])
 
     return <Svg style={styles.canvas}>
-        {drawGrid(gridSizeX, gridSizeY)}
+        <DrawGrid
+            gridSizeX={gridSizeX}
+            gridSizeY={gridSizeY}>
+        </DrawGrid>
         {renderPoints(props.points)}
-        {props.isCorrection ? renderCorrectionPoints(props.correctPoints) : <Text>Test</Text>}
+        {props.isCorrection ? renderCorrectionPoints(props.correctPoints) : null}
     </Svg>
 
 }
