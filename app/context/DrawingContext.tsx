@@ -34,10 +34,10 @@ export const DrawingProvider = (props: any) => {
     const gridSizeX = floorEvenNumber(maxWidth / SCALE)
     const maxHeight = SCREEN_HEIGHT * 0.7
     const gridSizeY = floorEvenNumber(maxHeight / SCALE);
-    //Set OFFSET_X
-    const OFFSET_X = SCREEN_WIDTH * (SCREEN_WIDTH - gridSizeX * SCALE) / 100
-    //SET OFFSET_Y
-    const OFFSET_Y = SCREEN_HEIGHT * (SCREEN_HEIGHT - gridSizeY * SCALE) / 100;
+    //Set offset when drawing points
+    const offsetX = (SCREEN_WIDTH - (gridSizeX * SCALE)) / 2
+    const offsetY = SCREEN_HEIGHT * 0.2 + (SCREEN_HEIGHT * 0.8 - gridSizeY * SCALE) / 2;
+
 
     const value = {
         score: score,
@@ -48,8 +48,8 @@ export const DrawingProvider = (props: any) => {
         currentFunction: 0,
         gridSizeX: gridSizeX,
         gridSizeY: gridSizeY,
-        OFFSET_X: OFFSET_X,
-        OFFSET_Y: OFFSET_Y,
+        offsetX: offsetX,
+        offsetY: offsetY,
     };
 
     const result = useMemo(() => {

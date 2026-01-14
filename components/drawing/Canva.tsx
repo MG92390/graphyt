@@ -13,8 +13,8 @@ import { useDrawing } from "@/app/context/DrawingContext";
 
 export default function Canva(props: Readonly<CanvaPropsType>) {
     const [styles, setStyles] = useState(StyleSheet.create({ canvas: {} }))
-
     const gridDim = useDrawing()
+
     useEffect(() => {
         setStyles(StyleSheet.create({
             canvas: {
@@ -31,8 +31,8 @@ export default function Canva(props: Readonly<CanvaPropsType>) {
             gridSizeX={gridDim.gridSizeX}
             gridSizeY={gridDim.gridSizeY}>
         </DrawGrid>
-        {renderPoints(props.points)}
-        {props.isCorrection ? renderCorrectionPoints(props.correctPoints) : null}
+        {renderPoints(props.points, gridDim.offsetX, gridDim.offsetY)}
+        {props.isCorrection ? renderCorrectionPoints(props.correctPoints, gridDim.offsetX, gridDim.offsetY) : null}
     </Svg>
 
 }

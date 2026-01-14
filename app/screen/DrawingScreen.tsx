@@ -16,7 +16,7 @@ import Canva from '@/components/drawing/Canva';
  * @returns 
  */
 export default function DrawingScreen() {
-    const init_timer = 300000000;
+    const init_timer = 30;
 
     const [currentFunction, setCurrentFunction] = useState(0);
     const [points, setPoints] = useState<Array<PointsType>>([]);

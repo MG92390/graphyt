@@ -1,18 +1,18 @@
 import { Circle } from "react-native-svg";
 import { PointsType } from "../types/PointsType";
 import React from "react";
-import { OFFSET_X, OFFSET_Y } from "./DrawingDimensions";
 
 /**
  * Draw Circle SVG points with given color
  */
 
-export function drawPoints(points: Array<PointsType>, color: string): React.JSX.Element[] {
+export function drawPoints(points: Array<PointsType>, offsetX: number, offsetY: number, color: string): React.JSX.Element[] {
+
     return points.map((point, index) => (
         <Circle
             key={index}
-            cx={point.x - OFFSET_X}
-            cy={point.y - OFFSET_Y}
+            cx={point.x - offsetX}
+            cy={point.y - offsetY}
             r="4"
             fill={color}
         />
@@ -20,11 +20,11 @@ export function drawPoints(points: Array<PointsType>, color: string): React.JSX.
 }
 
 //Render the points on the grid
-export function renderPoints(points: Array<PointsType>): React.JSX.Element[] {
-    return drawPoints(points, "#6366f1");
+export function renderPoints(points: Array<PointsType>, offsetX: number, offsetY: number): React.JSX.Element[] {
+    return drawPoints(points, offsetX, offsetY, "#6366f1");
 };
 
 //Render the correct points
-export function renderCorrectionPoints(correctPoints: Array<PointsType>): React.JSX.Element[] {
-    return drawPoints(correctPoints, "#b71e13ff");
+export function renderCorrectionPoints(correctPoints: Array<PointsType>, offsetX: number, offsetY: number): React.JSX.Element[] {
+    return drawPoints(correctPoints, offsetX, offsetY, "#b71e13ff");
 };

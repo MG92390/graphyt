@@ -15,15 +15,12 @@ export default function RootLayout() {
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <SafeAreaView style={{ flex: 1 }}>
           <Stack
-            screenOptions={{
-              title: "Projet math",
-            }}
-          >
+            screenOptions={{ headerShown: false }}>
             <Stack.Screen
               name="screen/DrawingScreen" />
           </Stack>
         </SafeAreaView>
       </SafeAreaProvider>
-    </DrawingProvider>
+    </DrawingProvider >
   );
 }

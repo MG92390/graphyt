@@ -16,9 +16,8 @@ export const styles = StyleSheet.create({
     header: {
         alignItems: 'center',
         justifyContent: "space-evenly",
-        flex: 0.2,
         flexDirection: 'row',
-        minHeight: "20%",
+        height: "20%",
         padding: 10
     },
     header_text: {
